@@ -20,7 +20,7 @@ export function Sidebar({ activePage }: SidebarProps) {
           My Account
         </Button>
       </Link>
-      <Link href="/recent-chats" passHref>
+      <Link href="/profile/recent-chats" passHref>
         <Button
           variant="ghost"
           className={`w-full justify-start px-3 py-2 ${
@@ -30,7 +30,7 @@ export function Sidebar({ activePage }: SidebarProps) {
           Recent Chats
         </Button>
       </Link>
-      <Link href="/connections" passHref>
+      <Link href="/profile/connections" passHref>
         <Button
           variant="ghost"
           className={`w-full justify-start px-3 py-2 ${
