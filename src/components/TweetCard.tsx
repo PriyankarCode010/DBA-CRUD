@@ -15,7 +15,7 @@ type Props = {
 
 const TweetCard = (props: Props) => {
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-zinc-800 border-zinc-800">
       <CardContent className="p-4">
         <div className="flex gap-3">
           <Avatar>

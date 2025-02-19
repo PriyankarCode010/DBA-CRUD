@@ -12,10 +12,10 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-zinc-900 text-white">
       <div className="container mx-auto px-4 py-8">
-        <Link href="/" className="inline-flex items-center text-zinc-400 hover:text-white mb-6 group">
+        {/* <Link href="/home" className="inline-flex items-center text-zinc-400 hover:text-white mb-6 group">
           <ChevronLeft className="w-5 h-5 mr-1 transition-transform group-hover:-translate-x-1" />
           Back
-        </Link>
+        </Link> */}
 
         <div className="flex flex-col lg:flex-row gap-8">
           <Sidebar activePage="account" />
