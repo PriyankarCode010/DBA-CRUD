@@ -4,6 +4,7 @@ import { Card, CardContent } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Hash, Heart, MessageSquare, Share2 } from "lucide-react";
+import { auth } from "@/lib/firebase";
 
 type Props = {
   user: Auth;
@@ -20,7 +21,7 @@ const TweetCard = (props: Props) => {
       <CardContent className="p-4">
         <div className="flex gap-3">
           <Avatar>
-            <AvatarImage src="/placeholder.svg?height=40&width=40" />
+            <AvatarImage src={auth.currentUser?.photoURL!} />
             <AvatarFallback>
               {props.tweet
                 ? props.tweet.name[0]

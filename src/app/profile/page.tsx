@@ -7,8 +7,34 @@ import { Separator } from "@/components/ui/separator"
 import { ChevronLeft, Edit, Lock } from "lucide-react"
 import Link from "next/link"
 import { Sidebar } from "@/components/SideBar"
+import { auth, db } from "@/lib/firebase";
+import { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import TweetCard from "@/components/TweetCard";
 
 export default function ProfilePage() {
+
+  const [tweets, setTweets] = useState<any>();
+  const chatsCollectionRef = collection(db, "chats");
+
+  const getTweets = async () => {
+      try {
+        const data = await getDocs(chatsCollectionRef);
+        const filterData = data.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        // console.log(filterData)
+        setTweets(filterData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      getTweets();
+    }, []);
+
   return (
     <div className="min-h-screen bg-zinc-900 text-white">
       <div className="container mx-auto px-4 py-8">
@@ -25,94 +51,34 @@ export default function ProfilePage() {
             <h1 className="text-2xl font-bold mb-6">My Account</h1>
 
             <Card className="bg-zinc-800 border-none text-white">
-              <CardHeader className="flex flex-row items-center gap-4 pb-0">
+              <CardHeader className="flex flex-row items-center gap-4 py-7">
                 <Avatar className="w-20 h-20">
                   <AvatarImage
                     src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-EYceHp4dk9K4DnOYSrlZH3AbFI0wrz.png"
                     alt="Profile picture"
                   />
-                  <AvatarFallback>3X</AvatarFallback>
+                  <AvatarFallback>{auth.currentUser?.displayName}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                  <h2 className="text-xl font-semibold">3XS ä3ä</h2>
-                  <Button variant="secondary" className="mt-2 bg-indigo-500 hover:bg-indigo-600 text-white">
+                  <h2 className="text-xl font-semibold">{auth.currentUser?.displayName}</h2>
+                  <h2 className="text-lg font-medium text-white/60">{auth.currentUser?.email}</h2>
+                  {/* <Button variant="secondary" className="mt-2 bg-indigo-500 hover:bg-indigo-600 text-white">
                     Edit User Profile
-                  </Button>
+                  </Button> */}
                 </div>
               </CardHeader>
-
-              <CardContent className="space-y-6 mt-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-xs text-zinc-400">DISPLAY NAME</Label>
-                      <div className="text-white">3XS ä3ä</div>
-                    </div>
-                    <Button variant="secondary" size="sm" className="bg-zinc-700 hover:bg-zinc-600">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-xs text-zinc-400">USERNAME</Label>
-                      <div className="text-white">3xsa3a</div>
-                    </div>
-                    <Button variant="secondary" size="sm" className="bg-zinc-700 hover:bg-zinc-600">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-xs text-zinc-400">EMAIL</Label>
-                      <div className="text-white">••••••••••@gmail.com</div>
-                    </div>
-                    <Button variant="secondary" size="sm" className="bg-zinc-700 hover:bg-zinc-600">
-                      <Edit className="w-4 h-4 mr-2" />
-                      Edit
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label className="text-xs text-zinc-400">PHONE NUMBER</Label>
-                      <div className="text-white">••••••••5484</div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="link" className="text-zinc-400 hover:text-white">
-                        Remove
-                      </Button>
-                      <Button variant="secondary" size="sm" className="bg-zinc-700 hover:bg-zinc-600">
-                        <Edit className="w-4 h-4 mr-2" />
-                        Edit
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                <Separator className="my-6 bg-zinc-700" />
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Password and Authentication</h3>
-                  <div className="flex gap-4">
-                    <Button className="bg-indigo-500 hover:bg-indigo-600">
-                      <Lock className="w-4 h-4 mr-2" />
-                      Change Password
-                    </Button>
-                    <Button variant="secondary" className="bg-indigo-500 hover:bg-indigo-600">
-                      Enable Authenticator App
-                    </Button>
-                  </div>
-                  <p className="text-sm text-zinc-400">
-                    Protect your account with an extra layer of security. Once configured, you'll be required to enter
-                    your password and complete one additional step in order to sign in.
-                  </p>
-                </div>
-              </CardContent>
             </Card>
+
+            <h1 className="text-2xl my-3 font-semibold">My Tweets...</h1>
+            <main className="space-y-4">
+            {tweets
+              ? tweets
+                .filter((tw: any) => tw.author === auth.currentUser?.email)
+                .map((tw: any) => (
+                <TweetCard key={tw.id} user={auth} tweet={tw} />
+                ))
+              : "No tweets available!"}
+          </main>
           </div>
         </div>
       </div>

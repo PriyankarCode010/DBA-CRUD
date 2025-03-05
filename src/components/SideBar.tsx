@@ -17,7 +17,7 @@ import { addDoc, collection } from "firebase/firestore";
 
 type SidebarProps = {
   activePage: "home" | "account" | "recentChats" | "connections";
-  getTweets: any;
+  getTweets?: any;
 };
 
 export function Sidebar({ activePage, getTweets }: SidebarProps) {
