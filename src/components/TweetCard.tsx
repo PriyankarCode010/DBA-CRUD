@@ -8,8 +8,9 @@ import { Hash, Heart, MessageSquare, Share2 } from "lucide-react";
 type Props = {
   user: Auth;
   tweet: {
-    username: string;
+    name: string;
     content: string;
+    author: string;
   };
 };
 
@@ -22,17 +23,17 @@ const TweetCard = (props: Props) => {
             <AvatarImage src="/placeholder.svg?height=40&width=40" />
             <AvatarFallback>
               {props.tweet
-                ? props.tweet.username[0]
+                ? props.tweet.name[0]
                 : "X"}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-white">
-                {props.tweet.username}
+                {props.tweet.name}
               </span>
               <span className="text-zinc-500">
-                @{props.tweet.username}
+                @{props.tweet.author}
               </span>
               <span className="text-zinc-500">· 4h</span>
             </div>

@@ -1,14 +1,41 @@
-import { Button } from "@/components/ui/button"
-import { auth } from "@/lib/firebase"
-import { signOut } from "firebase/auth"
-import { LogOut } from "lucide-react"
-import Link from "next/link"
+"use client";
+import { Button } from "@/components/ui/button";
+import { auth, db } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
+import { LogOut } from "lucide-react";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import { addDoc, collection } from "firebase/firestore";
 
 type SidebarProps = {
-  activePage: "home" | "account" | "recentChats" | "connections"
-}
+  activePage: "home" | "account" | "recentChats" | "connections";
+};
 
 export function Sidebar({ activePage }: SidebarProps) {
+  const [newPost, setNewPost] = useState("");
+  const tweetsCollectionRef = collection(db, "chats");
+
+  const handleNewPost = async () => {
+    try {
+      await addDoc(tweetsCollectionRef, {
+        name: auth?.currentUser?.displayName,
+        content: newPost,
+        author: auth?.currentUser?.email,
+      });
+      // getMoviesList()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -27,7 +54,9 @@ export function Sidebar({ activePage }: SidebarProps) {
         <Button
           variant="ghost"
           className={`w-full justify-start px-3 py-2 ${
-            activePage === "home" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:bg-zinc-800"
+            activePage === "home"
+              ? "bg-zinc-800 text-white"
+              : "text-zinc-400 hover:bg-zinc-800"
           }`}
         >
           Home
@@ -37,12 +66,47 @@ export function Sidebar({ activePage }: SidebarProps) {
         <Button
           variant="ghost"
           className={`w-full justify-start px-3 py-2 ${
-            activePage === "account" ? "bg-zinc-800 text-white" : "text-zinc-400 hover:bg-zinc-800"
+            activePage === "account"
+              ? "bg-zinc-800 text-white"
+              : "text-zinc-400 hover:bg-zinc-800"
           }`}
         >
           My Account
         </Button>
       </Link>
+
+      <Dialog>
+        <DialogTrigger className="bg-white font-semibold text-sm text-black px-3 py-1 rounded-full">
+          NEW POST +
+        </DialogTrigger>
+        <DialogContent className="bg-[#262626] border-none">
+          <DialogHeader>
+            <DialogTitle className="text-white/40 font-medium hidden">
+              Write your thoughts...
+            </DialogTitle>
+            {/* <DialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </DialogDescription> */}
+          </DialogHeader>
+          <div>
+            <textarea
+              className="border-none focus:outline-none active:outline-none bg-[#262626] text-white w-full"
+              rows={10}
+              placeholder="Write your thoughts..."
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+            ></textarea>
+          </div>
+          <Button
+            className="bg-white text-black font-semibold"
+            onClick={handleNewPost}
+          >
+            Post
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       {/* <Link href="/profile/recent-chats" passHref>
         <Button
           variant="ghost"
@@ -72,6 +136,5 @@ export function Sidebar({ activePage }: SidebarProps) {
         Logout
       </Button>
     </div>
-  )
+  );
 }
-
