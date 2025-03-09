@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Edit, Hash, Heart, MessageSquare, Share2, Trash2 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
+import { format } from "date-fns"
 import {
   Dialog,
   DialogContent,
@@ -18,9 +19,21 @@ import {
   collection,
   deleteDoc,
   doc,
+  serverTimestamp,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 type Props = {
   user: Auth;
@@ -29,6 +42,7 @@ type Props = {
     name: string;
     content: string;
     author: string;
+    createdAt: Timestamp;
   };
   getTweets?: any;
   isProfile: boolean;
@@ -43,7 +57,8 @@ const TweetCard = (props: Props) => {
     try {
       const tweetDocRef = doc(tweetsCollectionRef, props.tweet.id); // Reference to the tweet document
       await updateDoc(tweetDocRef, {
-        content: content, // Updating the content
+        content: content,
+        createdAt: serverTimestamp(), // Updating the content
       });
       props.getTweets(); // Refresh tweets after update
       setOpen(false); // Close modal after editing
@@ -62,6 +77,11 @@ const TweetCard = (props: Props) => {
     }
   };
 
+  const formatTimestamp = (timestamp:Timestamp) => {
+    if (!timestamp) return "Loading...";
+    return format(timestamp.toDate(), "MMM dd, yyyy HH:mm"); // Example: Jan 15, 2025 14:30
+  };
+
   return (
     <>
       <Card className="bg-zinc-800 border-zinc-800">
@@ -75,12 +95,14 @@ const TweetCard = (props: Props) => {
             </Avatar>
             <div className="flex-1">
               <div className="flex justify-between items-center">
-                <div className="flex gap-2">
-                  <span className="font-semibold text-white">
+                <div className="flex gap-2 items-center">
+                  <span className="font-medium text-white">
                     {props.tweet.name}
                   </span>
-                  <span className="text-zinc-500">@{props.tweet.author}</span>
-                  <span className="text-zinc-500">· 4h</span>
+                  <span className="text-zinc-500 text-sm">
+                    @{props.tweet.author}
+                  </span>
+                  {/* <span className="text-zinc-500">· 4h</span> */}
                 </div>
                 <>
                   {props.isProfile &&
@@ -139,7 +161,12 @@ const TweetCard = (props: Props) => {
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction className="text-red-500" onClick={handleDeletePost}>Delete</AlertDialogAction>
+                            <AlertDialogAction
+                              className="text-red-500"
+                              onClick={handleDeletePost}
+                            >
+                              Delete
+                            </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
@@ -149,11 +176,10 @@ const TweetCard = (props: Props) => {
                   )}
                 </>
               </div>
-              <p className="mt-2 text-sm text-white/70">
-                {props.tweet.content}
-              </p>
+              <p className="mt-2 text-xl text-white">{props.tweet.content}</p>
+              <span className="text-zinc-500 text-xs">{formatTimestamp(props.tweet.createdAt)}</span>
 
-              <div className="flex gap-6 mt-4">
+              {/* <div className="flex gap-6 mt-4">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -177,7 +203,7 @@ const TweetCard = (props: Props) => {
                 >
                   <Share2 className="w-4 h-4 mr-2" />8
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </CardContent>

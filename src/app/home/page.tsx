@@ -67,9 +67,21 @@ export default function Home() {
 
           <main className="space-y-4">
             {tweets
-              ? tweets.map((tw: any) => (
-                  <TweetCard key={tw.id} user={auth} tweet={tw} getTweets={getTweets} isProfile={false} />
-                ))
+              ? tweets
+                  .filter((tw: any) => tw.author === auth.currentUser?.email)
+                  .sort(
+                    (a: any, b: any) =>
+                      b.createdAt?.seconds - a.createdAt?.seconds
+                  ) // Sorting by time (latest first)
+                  .map((tw: any) => (
+                    <TweetCard
+                      key={tw.id}
+                      user={auth}
+                      tweet={tw}
+                      isProfile={true}
+                      getTweets={getTweets}
+                    />
+                  ))
               : "No tweets available!"}
           </main>
         </div>
