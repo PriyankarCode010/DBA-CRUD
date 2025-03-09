@@ -55,20 +55,20 @@ export default function Home() {
           <header className="sticky top-0 backdrop-blur-xl z-10 py-4 mb-4">
             <h1 className="text-xl font-bold flex items-center gap-2">
               <Terminal className="w-6 h-6" />
-              DevFeed
+              TweetFeed
             </h1>
-            <Tabs defaultValue="following" className="mt-4">
+            {/* <Tabs defaultValue="following" className="mt-4">
               <TabsList className="grid w-full grid-cols-2 bg-zinc-900">
                 <TabsTrigger value="following">Following</TabsTrigger>
                 <TabsTrigger value="trending">Trending</TabsTrigger>
               </TabsList>
-            </Tabs>
+            </Tabs> */}
           </header>
 
           <main className="space-y-4">
             {tweets
               ? tweets.map((tw: any) => (
-                  <TweetCard key={tw.id} user={auth} tweet={tw} />
+                  <TweetCard key={tw.id} user={auth} tweet={tw} getTweets={getTweets} isProfile={false} />
                 ))
               : "No tweets available!"}
           </main>
