@@ -72,14 +72,24 @@ export default function ProfilePage() {
               </Card>
 
               <h1 className="text-2xl my-3 font-semibold">My Tweets...</h1>
-              <main className="space-y-4">
+              <main className="space-y-4 overflow-y-scroll">
                 {tweets
                   ? tweets
                       .filter(
                         (tw: any) => tw.author === auth.currentUser?.email
                       )
+                      .sort(
+                        (a: any, b: any) =>
+                          b.createdAt?.seconds - a.createdAt?.seconds
+                      ) // Sorting by time (latest first)
                       .map((tw: any) => (
-                        <TweetCard key={tw.id} user={auth} tweet={tw} isProfile={true} getTweets={getTweets} />
+                        <TweetCard
+                          key={tw.id}
+                          user={auth}
+                          tweet={tw}
+                          isProfile={true}
+                          getTweets={getTweets}
+                        />
                       ))
                   : "No tweets available!"}
               </main>

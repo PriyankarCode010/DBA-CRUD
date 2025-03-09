@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 
 type SidebarProps = {
   activePage: "home" | "account" | "recentChats" | "connections";
@@ -31,6 +31,7 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
         name: auth?.currentUser?.displayName,
         content: newPost,
         author: auth?.currentUser?.email,
+        createdAt: serverTimestamp(),
       });
       getTweets()
     } catch (error) {
@@ -50,7 +51,7 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
     }
   };
   return (
-    <div className="w-full lg:w-64 space-y-1 pt-2 flex flex-col gap-0.5">
+    <div className="w-full lg:w-64 space-y-1 pt-2 flex flex-col gap-0.5 fixed">
       {/* <div className="text-sm text-zinc-500 mb-2">USER SETTINGS</div> */}
       <Link href="/home" passHref>
         <Button
