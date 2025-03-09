@@ -49,7 +49,7 @@ export default function Home() {
         <FaXTwitter className="z-50 text-white" />
       </div> */}
       <div className="flex px-4 py-8">
-        <Sidebar activePage="home" />
+        <Sidebar activePage="home" getTweets={getTweets} />
 
         <div className="max-w-3xl mx-auto w-full p-4">
           <header className="sticky top-0 backdrop-blur-xl z-10 py-4 mb-4">

@@ -17,11 +17,13 @@ import { addDoc, collection } from "firebase/firestore";
 
 type SidebarProps = {
   activePage: "home" | "account" | "recentChats" | "connections";
+  getTweets?: any;
 };
 
-export function Sidebar({ activePage }: SidebarProps) {
+export function Sidebar({ activePage, getTweets }: SidebarProps) {
   const [newPost, setNewPost] = useState("");
   const tweetsCollectionRef = collection(db, "chats");
+  const [open, setOpen] = useState(false);
 
   const handleNewPost = async () => {
     try {
@@ -30,7 +32,7 @@ export function Sidebar({ activePage }: SidebarProps) {
         content: newPost,
         author: auth?.currentUser?.email,
       });
-      // getMoviesList()
+      getTweets()
     } catch (error) {
       console.log(error);
     }
@@ -75,7 +77,7 @@ export function Sidebar({ activePage }: SidebarProps) {
         </Button>
       </Link>
 
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger className="bg-white font-semibold text-sm text-black px-3 py-1 rounded-full">
           NEW POST +
         </DialogTrigger>
@@ -100,7 +102,10 @@ export function Sidebar({ activePage }: SidebarProps) {
           </div>
           <Button
             className="bg-white text-black font-semibold"
-            onClick={handleNewPost}
+            onClick={() => {
+              handleNewPost();
+              setOpen(false);
+            }}
           >
             Post
           </Button>
