@@ -42,6 +42,7 @@ type Props = {
     name: string;
     content: string;
     author: string;
+    photoUrl: string;
     createdAt: Timestamp;
   };
   getTweets?: any;
@@ -88,7 +89,7 @@ const TweetCard = (props: Props) => {
         <CardContent className="p-4">
           <div className="flex gap-3">
             <Avatar>
-              <AvatarImage src={auth.currentUser?.photoURL!} />
+              <AvatarImage src={props.tweet.photoUrl} />
               <AvatarFallback>
                 {props.tweet ? props.tweet.name[0] : "X"}
               </AvatarFallback>

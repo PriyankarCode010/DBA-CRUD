@@ -80,7 +80,7 @@ export default function ProfilePage() {
                       )
                       .sort(
                         (a: any, b: any) =>
-                          b.createdAt?.seconds - a.createdAt?.seconds
+                          (b.createdAt?.toDate?.().getTime() || 0) - (a.createdAt?.toDate?.().getTime() || 0)
                       ) // Sorting by time (latest first)
                       .map((tw: any) => (
                         <TweetCard

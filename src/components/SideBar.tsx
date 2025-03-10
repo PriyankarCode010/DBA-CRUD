@@ -31,6 +31,7 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
         name: auth?.currentUser?.displayName,
         content: newPost,
         author: auth?.currentUser?.email,
+        photoUrl: auth?.currentUser?.photoURL,
         createdAt: serverTimestamp(),
       });
       getTweets()

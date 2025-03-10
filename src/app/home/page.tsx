@@ -1,23 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  MessageSquare,
-  Heart,
-  Share2,
-  Code2,
-  Terminal,
-  Hash,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Terminal } from "lucide-react";
 import TweetCard from "@/components/TweetCard";
 import { auth, db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { Sidebar } from "@/components/SideBar";
-import { FaXTwitter } from "react-icons/fa6";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("following");
@@ -68,11 +56,7 @@ export default function Home() {
           <main className="space-y-4">
             {tweets
               ? tweets
-                  .filter((tw: any) => tw.author === auth.currentUser?.email)
-                  .sort(
-                    (a: any, b: any) =>
-                      b.createdAt?.seconds - a.createdAt?.seconds
-                  ) // Sorting by time (latest first)
+                  .sort((a: any, b: any) => (b.createdAt?.toDate?.().getTime() || 0) - (a.createdAt?.toDate?.().getTime() || 0)) // Sorting by time (latest first)
                   .map((tw: any) => (
                     <TweetCard
                       key={tw.id}
