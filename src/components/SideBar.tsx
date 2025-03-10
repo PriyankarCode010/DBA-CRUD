@@ -35,6 +35,7 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
         createdAt: serverTimestamp(),
       });
       getTweets()
+      setNewPost("");
     } catch (error) {
       console.log(error);
     }
