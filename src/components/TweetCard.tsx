@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Edit, Hash, Heart, MessageSquare, Share2, Trash2 } from "lucide-react";
 import { auth, db } from "@/lib/firebase";
-import { format } from "date-fns"
+import { format } from "date-fns";
 import {
   Dialog,
   DialogContent,
@@ -34,12 +34,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 type Props = {
   user: Auth;
   tweet: {
     id: string;
     name: string;
+    title: string;
     content: string;
     author: string;
     photoUrl: string;
@@ -51,8 +53,11 @@ type Props = {
 
 const TweetCard = (props: Props) => {
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(props.tweet.title);
   const [content, setContent] = useState(props.tweet.content);
   const tweetsCollectionRef = collection(db, "chats");
+
+  const router = useRouter();
 
   const handleEditPost = async () => {
     try {
@@ -78,7 +83,7 @@ const TweetCard = (props: Props) => {
     }
   };
 
-  const formatTimestamp = (timestamp:Timestamp) => {
+  const formatTimestamp = (timestamp: Timestamp) => {
     if (!timestamp) return "Loading...";
     return format(timestamp.toDate(), "MMM dd, yyyy HH:mm"); // Example: Jan 15, 2025 14:30
   };
@@ -113,7 +118,7 @@ const TweetCard = (props: Props) => {
                       <Dialog open={open} onOpenChange={setOpen}>
                         <DialogTrigger>
                           {/* NEW POST + */}
-                          <Edit className="text-white h-4 cursor-pointer" />
+                          <Edit className="text-white h-4 cursor-pointer z-50" />
                         </DialogTrigger>
                         <DialogContent className="bg-[#262626] border-none">
                           <DialogHeader>
@@ -126,9 +131,16 @@ const TweetCard = (props: Props) => {
                               </DialogDescription> */}
                           </DialogHeader>
                           <div>
+                            <input
+                              type="text"
+                              value={title}
+                              onChange={(e) => setTitle(e.target.value)}
+                              placeholder="Title your blog..."
+                              className="border-b-2 border-slate-500 focus:outline-none active:outline-none bg-[#262626] text-white w-full mb-2"
+                            />
                             <textarea
-                              className="border-none focus:outline-none active:outline-none bg-[#262626] text-white w-full"
-                              rows={10}
+                              className="border-2 p-2 rounded-md border-slate-500 focus:outline-none active:outline-none bg-[#262626] text-white w-full"
+                              rows={20}
                               placeholder="Write your thoughts..."
                               value={content}
                               onChange={(e) => setContent(e.target.value)}
@@ -177,8 +189,15 @@ const TweetCard = (props: Props) => {
                   )}
                 </>
               </div>
-              <p className="mt-2 text-xl text-white">{props.tweet.content}</p>
-              <span className="text-zinc-500 text-xs">{formatTimestamp(props.tweet.createdAt)}</span>
+              <p
+                className="mt-2 text-xl text-white cursor-pointer hover:underline"
+                onClick={() => router.push(`/tweet/${props.tweet.id}`)}
+              >
+                {props.tweet.title}
+              </p>
+              <span className="text-zinc-500 text-xs">
+                {formatTimestamp(props.tweet.createdAt)}
+              </span>
 
               {/* <div className="flex gap-6 mt-4">
                 <Button

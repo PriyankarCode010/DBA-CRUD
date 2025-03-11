@@ -31,7 +31,7 @@ export default function Home() {
         className="bg-gradient-to-br from-slate-300 to-slate-500 py-4 bg-clip-text text-center text-4xl font-medium tracking-tight text-transparent md:text-7xl"
       >
         <div className="text-9xl font-extrabold flex text-white/70">
-          PESU-
+          PES
           <FaXTwitter className="z-50 text-white" />
         </div>
       </motion.h1>

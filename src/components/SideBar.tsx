@@ -21,7 +21,8 @@ type SidebarProps = {
 };
 
 export function Sidebar({ activePage, getTweets }: SidebarProps) {
-  const [newPost, setNewPost] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const tweetsCollectionRef = collection(db, "chats");
   const [open, setOpen] = useState(false);
 
@@ -29,13 +30,15 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
     try {
       await addDoc(tweetsCollectionRef, {
         name: auth?.currentUser?.displayName,
-        content: newPost,
+        title: title,
+        content: content,
         author: auth?.currentUser?.email,
         photoUrl: auth?.currentUser?.photoURL,
         createdAt: serverTimestamp(),
       });
-      getTweets()
-      setNewPost("");
+      getTweets();
+      setTitle("");
+      setContent("");
     } catch (error) {
       console.log(error);
     }
@@ -95,12 +98,19 @@ export function Sidebar({ activePage, getTweets }: SidebarProps) {
             </DialogDescription> */}
           </DialogHeader>
           <div>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title your blog..."
+              className="border-b-2 border-slate-500 focus:outline-none active:outline-none bg-[#262626] text-white w-full mb-2"
+            />
             <textarea
-              className="border-none focus:outline-none active:outline-none bg-[#262626] text-white w-full"
-              rows={10}
+              className="border-2 p-2 rounded-md border-slate-500 focus:outline-none active:outline-none bg-[#262626] text-white w-full"
+              rows={20}
               placeholder="Write your thoughts..."
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
             ></textarea>
           </div>
           <Button

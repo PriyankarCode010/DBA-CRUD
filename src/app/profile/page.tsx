@@ -10,11 +10,11 @@ import TweetCard from "@/components/TweetCard";
 
 export default function ProfilePage() {
   const [tweets, setTweets] = useState<any>();
-  const chatsCollectionRef = collection(db, "chats");
+  const tweetsCollectionRef = collection(db, "chats");
 
   const getTweets = async () => {
     try {
-      const data = await getDocs(chatsCollectionRef);
+      const data = await getDocs(tweetsCollectionRef);
       const filterData = data.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
