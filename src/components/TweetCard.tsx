@@ -94,7 +94,7 @@ const TweetCard = (props: Props) => {
         <CardContent className="p-4">
           <div className="flex gap-3">
             <Avatar>
-              <AvatarImage src={props.tweet.photoUrl} />
+              <AvatarImage src={props.tweet.photoUrl || "https://i.pinimg.com/736x/85/e6/47/85e64767b129d2cae2d1c47b1ed0aece.jpg"} />
               <AvatarFallback>
                 {props.tweet ? props.tweet.name[0] : "X"}
               </AvatarFallback>

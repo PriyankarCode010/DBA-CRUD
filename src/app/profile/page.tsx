@@ -50,11 +50,11 @@ export default function ProfilePage() {
                 <CardHeader className="flex flex-row items-center gap-4 py-7">
                   <Avatar className="w-20 h-20">
                     <AvatarImage
-                      src={auth.currentUser?.photoURL!}
+                      src={auth.currentUser?.photoURL! || "https://i.pinimg.com/736x/85/e6/47/85e64767b129d2cae2d1c47b1ed0aece.jpg"}
                       alt="Profile picture"
                     />
-                    <AvatarFallback>
-                      {auth.currentUser?.displayName}
+                    <AvatarFallback className="text-3xl text-black">
+                      {auth?.currentUser?.displayName? auth?.currentUser?.displayName[0] : "X"}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
