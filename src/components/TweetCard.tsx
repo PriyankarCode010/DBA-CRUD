@@ -63,6 +63,7 @@ const TweetCard = (props: Props) => {
     try {
       const tweetDocRef = doc(tweetsCollectionRef, props.tweet.id); // Reference to the tweet document
       await updateDoc(tweetDocRef, {
+        title: title,
         content: content,
         createdAt: serverTimestamp(), // Updating the content
       });

@@ -43,7 +43,7 @@ const Page = (props: Props) => {
   return tweet ? (
     <div className="bg-[#18181a] min-h-screen">
       <div className="w-full flex justify-between items-center px-3">
-        <span className="text-white flex items-center gap-2 cursor-pointer hover:underline"><FaArrowLeft /> Back</span>
+        <a href="/home" className="text-white flex items-center gap-2 cursor-pointer hover:underline"><FaArrowLeft /> Back</a>
 
         <div className="flex gap-2 items-center">
           <div className="flex flex-col items-end">
